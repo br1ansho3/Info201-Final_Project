@@ -42,9 +42,9 @@
       - Shiny
       - ggplot2
       - Plotly
-      - ggiraph(http://davidgohel.github.io/ggiraph/) 
-      - DT(https://rstudio.github.io/DT/)
-      - Highcharter(http://jkunst.com/highcharter/hchart.html)
+      - [ggiraph](http://davidgohel.github.io/ggiraph/)
+      - [DT](https://rstudio.github.io/DT/)
+      - [Highcharter](http://jkunst.com/highcharter/hchart.html)
       - Jsonlite
       - Httr
 
