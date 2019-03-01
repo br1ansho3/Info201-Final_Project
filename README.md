@@ -24,7 +24,7 @@
 
 2. What types of data-wrangling (reshaping, reformatting, etc.) will you need to do to your data?
 
- We are going to do:  
+    We are going to do:  
   - Reformatting: Transform list of ingredients and list of nutrition facts into integrated table; Generate a table of nutrition fact based on the recipe; Transform the ingredients ID provided by the data into real ingredients name;
   - Reshaping: Match ingredients with the nutrition table; Enable backward search by nutrition needed.
   - Data visualization: transform ingredient list and nutrition table to a more interactive diagram.
