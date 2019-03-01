@@ -12,9 +12,9 @@
 
 3. What does your audience want to learn from your data?  Please list out at least 3 specific questions that your project will answer for your audience.
 
- - What the recipes are appropriate to provide certain amount of nutrition combination? What the proportion of each kind of nutrition for each recipe being selected?
- - How much calories absorbed in terms of the food eaten? How far the result calories from the daily calories limited set by user themselves.
- - Other
+    - What the recipes are appropriate to provide certain amount of nutrition combination? What the proportion of each kind of nutrition for each recipe being selected?
+    - How much calories absorbed in terms of the food eaten? How far the result calories from the daily calories limited set by user themselves.
+    - Other
 
 **Technical Description**
 
@@ -24,10 +24,11 @@
 
 2. What types of data-wrangling (reshaping, reformatting, etc.) will you need to do to your data?
 
-    We are going to do:  
-        - Reformatting: Transform list of ingredients and list of nutrition facts into integrated table; Generate a table of nutrition fact based on the recipe; Transform the ingredients ID provided by the data into real ingredients name;
-        - Reshaping: Match ingredients with the nutrition table; Enable backward search by nutrition needed.
-        - Data visualization: transform ingredient list and nutrition table to a more interactive diagram.
+    - We are going to do:
+
+       - Reformatting: Transform list of ingredients and list of nutrition facts into integrated table; Generate a table of nutrition fact based on the recipe; Transform the ingredients ID provided by the data into real ingredients name;
+       - Reshaping: Match ingredients with the nutrition table; Enable backward search by nutrition needed.
+       - Data visualization: transform ingredient list and nutrition table to a more interactive diagram.
 
 3. What (major/new) libraries will be using in this project?
       - Shiny
