@@ -21,7 +21,7 @@
 
     - What are the appropriate recipes that provide certain amount of nutrition combination? What's the proportion of each kind of nutrition for each recipe being selected?
     - How much calories absorbed in terms of the food eaten? The amount of consumed calories from the daily calories limited set by user themselves.
-    - Given a specific ingredient(s), what recipes can one make? (For people who want to change things up but don't know what to make)
+    - Given a specific ingredient(s), what recipes can one make? (For people who want to change things up but don't know what to make) and how much calories is contained in this recipe? 
 
 **Technical Description**
 
@@ -36,18 +36,19 @@
        - Reformatting: Transform list of ingredients and list of nutrition facts into integrated table; Generate a table of nutrition fact based on the recipe; Transform the ingredients ID provided by the data into real ingredients name;
        - Reshaping: Match ingredients with the nutrition table; Enable backward search by nutrition needed.
        - Data visualization: transform ingredient list and nutrition table to a more interactive diagram.
+       - Enriching: We are going to enrich the nutrition list in the recipe api with a more detailed nutrition fact in all the ingredients that is used in the recipe. 
 
 3. What (major/new) libraries will be using in this project?
       - Shiny
       - ggplot2
       - Plotly
-      - ggiraph(http://davidgohel.github.io/ggiraph/) --maybe
-      - DT(https://rstudio.github.io/DT/) --maybe
-      - Highcharter(http://jkunst.com/highcharter/hchart.html) --maybe
+      - ggiraph(http://davidgohel.github.io/ggiraph/) 
+      - DT(https://rstudio.github.io/DT/)
+      - Highcharter(http://jkunst.com/highcharter/hchart.html)
       - Jsonlite
       - Httr
 
 4. What major challenges do you anticipate?
 
      - How to design the input box so that the user can import their daily meal instead of one dish.
-     - reshaping/ combining the datasets from three different APIs can be a bit overwhelming, and may require a clear understanding of what each dataset provides.
+     - Reshaping/ Combining the datasets from two different APIs can be a bit overwhelming, and may require a clear understanding of what each dataset provides.
