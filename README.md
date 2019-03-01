@@ -15,7 +15,7 @@
 
 2. Who is your target audience?  Depending on the domain of your data, there may be a variety of audiences interested in using the dataset.  You should hone in on one of these audiences.
 
-    The target audience of the project is students who have a limited budget and time but care about their diets.
+    The target audience of the project is students who have a limited budget and time but care about their diets. Our dataset could allow our target audience to find the recipe that matches his or her nutrition needs or calculate for their nutrition intake for the day.
 
 3. What does your audience want to learn from your data?  Please list out at least 3 specific questions that your project will answer for your audience.
 
@@ -27,7 +27,7 @@
 
 1. How will you be reading in your data (i.e., are you using an API, or is it a static .csv/.json file)?
 
-    We are using APIs. We are deciding to use a Recipe API and also a Nutrition Fact API.
+    Our product will be in the Shiny form. We are using a API for the recipes on Spoonacular and also a nutrition fact API from the USDA.
 
 2. What types of data-wrangling (reshaping, reformatting, etc.) will you need to do to your data?
 
@@ -36,7 +36,7 @@
        - Reformatting: Transform list of ingredients and list of nutrition facts into integrated table; Generate a table of nutrition fact based on the recipe; Transform the ingredients ID provided by the data into real ingredients name;
        - Reshaping: Match ingredients with the nutrition table; Enable backward search by nutrition needed.
        - Data visualization: transform ingredient list and nutrition table to a more interactive diagram.
-       - Enriching: We are going to enrich the nutrition list in the recipe api with a more detailed nutrition fact in all the ingredients that is used in the recipe. 
+       - Enriching: We are going to enrich the ingredients list that is used in the recipe with more detailed nutrition information and also be able to match their flavors or diets.
 
 3. What (major/new) libraries will be using in this project?
       - Shiny
