@@ -1,6 +1,5 @@
 library(shiny)
-library(httr)
-library(jsonlite)
+
 library(shinyjs)
 # variables
 intolerace <- c("dairy", "gluten", "caffeine")
@@ -16,14 +15,14 @@ third_page <- tabPanel(
   titlePanel("What can I make?"),
   sidebarLayout(
     sidebarPanel(
-      #textInput(inputId = "ingredient_1", label = "", placeholder = "Ingredient 1"),
-      #textInput(inputId = "ingredient_2", label = "", placeholder = "Ingredient 2"),
-      #textInput(inputId = "ingredient_3", label = "", placeholder = "Ingredient 3"),
+      textInput(inputId = "ingredient_1", label = "Ingredient 1", placeholder = "Ingredient 1"),
       uiOutput("all_ingredients"),
       actionButton("add_ingredient", "Add Ingredient"),
+      actionButton("search", "Search"),
       hr(),
       h1("Filters:"),
-      selectInput(inputId = "intolerace", label = "Intolerance", choices = intolerace)
+      selectInput(inputId = "intolerace", label = "Intolerance", choices = intolerace),
+      textOutput("recipes")
       
     ),
     mainPanel(
