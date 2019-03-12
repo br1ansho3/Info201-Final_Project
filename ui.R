@@ -22,7 +22,7 @@ third_page <- tabPanel(
       hr(),
       h1("Filters:"),
       selectInput(inputId = "intolerace", label = "Intolerance", choices = intolerace),
-      textOutput("recipes")
+      uiOutput("recipes")
       
     ),
     mainPanel(
