@@ -20,13 +20,13 @@ third_page <- tabPanel(
       actionButton("add_ingredient", "Add Ingredient"),
       actionButton("search", "Search"),
       hr(),
-      h1("Filters:"),
-      selectInput(inputId = "intolerace", label = "Intolerance", choices = intolerace),
+      h3("List of Recipes"),
+      # selectInput(inputId = "intolerace", label = "Intolerance", choices = intolerace),
       uiOutput("recipes")
       
     ),
     mainPanel(
-      
+      uiOutput("htt")
     )
   )
 )
