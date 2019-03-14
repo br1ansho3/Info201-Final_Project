@@ -421,16 +421,14 @@ server <- function(input, output, session) {
   #calories
   output$Nutrition <- renderDataTable({    
     
-    if (input$add_btn ==1)
+    if (input$add_btn == 1)
     {dish1_cal <- nutrition_table(input$dish_1)
-    nutrition_cal <- rbind(dish1_cal)
-    nutrition_table_total <- aggregate(cbind(Value) ~ Nutrition, data=nutrition_cal, FUN=sum)
-    nutrition_table <- datatable(nutrition_table_total)
+    nutrition_table <- datatable(dish1_cal)
     return(nutrition_table)}
     else if (input$add_btn==2) 
     {dish1_cal <- nutrition_table(input$dish_1)
     dish2_cal <- nutrition_table(input$dish_2)
-    nutrition_cal <- rbind(dish1_cal, dish2_cal)
+    nutrition_cal <- bind_rows(dish1_cal, dish2_cal)
     nutrition_table_total <- aggregate(cbind(Value) ~ Nutrition, data=nutrition_cal, FUN=sum)
     nutrition_table <- datatable(nutrition_table_total)
     return(nutrition_table)}
@@ -438,7 +436,7 @@ server <- function(input, output, session) {
     {dish1_cal <- nutrition_table(input$dish_1)
     dish2_cal <- nutrition_table(input$dish_2)
     dish3_cal <- nutrition_table(input$dish_3)
-    nutrition_cal <- rbind(dish1_cal, dish2_cal, dish3_cal)
+    nutrition_cal <- bind_rows(dish1_cal, dish2_cal, dish3_cal)
     nutrition_table_total <- aggregate(cbind(Value) ~ Nutrition, data=nutrition_cal, FUN=sum)
     nutrition_table <- datatable(nutrition_table_total)
     return(nutrition_table)}
@@ -447,7 +445,7 @@ server <- function(input, output, session) {
     dish2_cal <- nutrition_table(input$dish_2)
     dish3_cal <- nutrition_table(input$dish_3)
     dish4_cal <- nutrition_table(input$dish_4)
-    nutrition_cal <- rbind(dish1_cal, dish2_cal, dish3_cal, dish4_cal)
+    nutrition_cal <- bind_rows(dish1_cal, dish2_cal, dish3_cal, dish4_cal)
     nutrition_table_total <- aggregate(cbind(Value) ~ Nutrition, data=nutrition_cal, FUN=sum)
     nutrition_table <- datatable(nutrition_table_total)
     return(nutrition_table)}
@@ -457,7 +455,7 @@ server <- function(input, output, session) {
     dish3_cal <- nutrition_table(input$dish_3)
     dish4_cal <- nutrition_table(input$dish_4)
     dish5_cal <- nutrition_table(input$dish_5)
-    nutrition_cal <- rbind(dish1_cal, dish2_cal, dish3_cal, dish4_cal, dish5_cal)
+    nutrition_cal <- bind_rows(dish1_cal, dish2_cal, dish3_cal, dish4_cal, dish5_cal)
     nutrition_table_total <- aggregate(cbind(Value) ~ Nutrition, data=nutrition_cal, FUN=sum)
     nutrition_table <- datatable(nutrition_table_total)
     return(nutrition_table)}
@@ -468,7 +466,7 @@ server <- function(input, output, session) {
     dish4_cal <- nutrition_table(input$dish_4)
     dish5_cal <- nutrition_table(input$dish_5)
     dish6_cal <- nutrition_table(input$dish_6)
-    nutrition_cal <- rbind(dish1_cal, dish2_cal, dish3_cal, dish4_cal, dish5_cal, dish5_cal)
+    nutrition_cal <- bind_rows(dish1_cal, dish2_cal, dish3_cal, dish4_cal, dish5_cal, dish5_cal)
     nutrition_table_total <- aggregate(cbind(Value) ~ Nutrition, data=nutrition_cal, FUN=sum)
     nutrition_table <- datatable(nutrition_table_total)
     return(nutrition_table)}
