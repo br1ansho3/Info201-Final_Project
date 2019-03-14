@@ -162,6 +162,9 @@ generatelist <- function(query_parameter, time, budget, key) {
 
   return(recipe_list)
 }
+
+
+
 generaterecipe <- function(id) {
   uri_2 <- paste0(
     "https://spoonacular-recipe-food-nutrition-v1",
