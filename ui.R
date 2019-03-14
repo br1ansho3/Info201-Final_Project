@@ -8,7 +8,8 @@ library(httr)
 library(shinyWidgets)
 library(RColorBrewer)
 library(shinyjs)
-
+library(lintr)
+library(styler)
 
 home_page <- tabPanel(
   "About Us",
@@ -144,115 +145,197 @@ home_page <- tabPanel(
                                                for even the pickiest eaters.
                                                Let us know what the coolest
                                                dish you find is!",
-                                               br(),
-                                               hr(),
-                                               h3("Thanks for visiting!")
+          br(),
+          hr(),
+          h3("Thanks for visiting!")
         ))
-        )
-        )
-        )
-                      )
-first_page <- tabPanel("Recipes given Nutrition", 
+      )
+    )
+  )
+)
+first_page <- tabPanel(
+  "Recipes given Nutrition",
   fluidRow(
-  column(3,
-  wellPanel(style = "background-color: #FFFFF0;
+    column(
+      3,
+      wellPanel(
+        style = "background-color: #FFFFF0;
             border:hidden #FFFFF0; color:#9CBFC1",
-            chooseSliderSkin("Modern", color = "#9CBFC1"),
-  titlePanel(h3(class = "mytitle", "Give Me Some Nutrition")),
-  sliderInput("calories", label = strong("Choose range of calories")
-              , min=10,max=1000,
-              value = c(10,2000)),
-  sliderInput("fat", label = strong("Choose range of fat (gram)"), min=0,max=50,
-              value = c(0,50)), 
-  sliderInput("protein", label = strong("Choose range of protein (gram)"), min=0,max=200,
-              value = c(0,200)),
-  sliderInput("carbs", label = strong("Choose range of Carbs (gram)"), min=0,max=200,
-              value = c(0,200)),
-  sliderInput("fiber", label = strong("Choose range of fiber (gram)"), min=0,max=200,
-              value = c(0,200)),
-  sliderInput("calcium", label = strong("Choose range of Calcium (milligram)"), min=0,max=2000,
-              value = c(0,2000)),
-  sliderInput("va", label = strong("Choose range of VitaminA (milligram)"), min=0,max=2000,
-              value = c(0,2000)),
-  sliderInput("vc", label = strong("Choose range of VitaminC (milligram)"), min=0,max=2000,
-              value = c(0,2000)),
-  sliderInput("vd", label = strong("Choose range of VitaminD (milligram)"), min=0,max=2000,
-              value = c(0,2000)),
-  sliderInput("ve", label = strong("Choose range of VitaminE (milligram)"), min=0,max=2000,
-              value = c(0,2000)),
-  sliderInput("timelimit", label = strong("Time consumed limit (min)"), min=0,max=120,
-              value = 120),
-  sliderInput("pricelimit", label = strong("Budget (dollar)"), min=0,max=30,
-              value = 15),
-  actionButton("submit", label = "Submit"))),
+        chooseSliderSkin("Modern", color = "#9CBFC1"),
+        titlePanel(h3(class = "mytitle", "Give Me Some Nutrition")),
+        sliderInput("calories",
+          label =
+            strong("Choose range of calories"), min = 10, max = 1000,
+          value = c(10, 2000)
+        ),
+        sliderInput("fat",
+          label = strong("Choose range of fat (gram)"), min = 0,
+          max = 50, value = c(0, 50)
+        ),
+        sliderInput("protein",
+          label = strong("Choose range of protein (gram)"),
+          min = 0, max = 200,
+          value = c(0, 200)
+        ),
+        sliderInput("carbs",
+          label = strong("Choose range of Carbs (gram)"),
+          min = 0, max = 200,
+          value = c(0, 200)
+        ),
+        sliderInput("fiber",
+          label = strong("Choose range of fiber (gram)"),
+          min = 0, max = 200,
+          value = c(0, 200)
+        ),
+        sliderInput("calcium",
+          label = strong("Choose range of Calcium (milligram)"),
+          min = 0, max = 2000,
+          value = c(0, 2000)
+        ),
+        sliderInput("va",
+          label = strong("Choose range of VitaminA (milligram)"),
+          min = 0, max = 2000,
+          value = c(0, 2000)
+        ),
+        sliderInput("vc",
+          label = strong("Choose range of VitaminC (milligram)"),
+          min = 0, max = 2000,
+          value = c(0, 2000)
+        ),
+        sliderInput("vd",
+          label = strong("Choose range of VitaminD (milligram)"),
+          min = 0, max = 2000,
+          value = c(0, 2000)
+        ),
+        sliderInput("ve",
+          label = strong("Choose range of VitaminE (milligram)"),
+          min = 0, max = 2000,
+          value = c(0, 2000)
+        ),
+        sliderInput("timelimit",
+          label = strong("Time consumed limit (min)"),
+          min = 0, max = 120,
+          value = 120
+        ),
+        sliderInput("pricelimit",
+          label = strong("Budget (dollar)"), min = 0, max = 30,
+          value = 15
+        ),
+        actionButton("submit", label = "Submit")
+      )
+    ),
 
-  column(2, 
-         conditionalPanel(condition = "input.submit > 0",
-  wellPanel(style = "background-color: #FFFFF0;
-            border:hidden #FFFFF0; color:#9CBFC1",uiOutput("recipe"),
-  uiOutput("choose_y"),
-  uiOutput("choose_x"))))
-  #selectInput("cuisine", label = strong("Choose cuisine(s)"), choices = ),
-,
-    column(7,tabsetPanel(tabPanel("Recipe Details", uiOutput("htt"),
-                    tags$section(tags$hr(),plotlyOutput("bar"),
-                                 tags$br(),tags$br(),tags$br()),
-                    uiOutput("refer")),
-                     tabPanel("Two Variables Plot",plotlyOutput("scatter"))))
+    column(
+      2,
+      conditionalPanel(
+        condition = "input.submit > 0",
+        wellPanel(
+          style = "background-color: #FFFFF0;
+            border:hidden #FFFFF0; color:#9CBFC1", uiOutput("recipe"),
+          uiOutput("choose_y"),
+          uiOutput("choose_x")
+        )
+      )
+    )
+    # selectInput("cuisine", label = strong("Choose cuisine(s)"), choices = ),
+    ,
+    column(7, tabsetPanel(
+      tabPanel(
+        "Recipe Details", uiOutput("htt"),
+        tags$section(
+          tags$hr(), plotlyOutput("bar"),
+          tags$br(), tags$br(), tags$br()
+        ),
+        uiOutput("refer")
+      ),
+      tabPanel("Compare Dishes", plotlyOutput("scatter"))
+    ))
+  )
+)
+second_page <- navbarMenu(
+  "Nutrition Calculator",
+  tabPanel(
+    "Nutrition Calculator",
+    sidebarLayout(
+      sidebarPanel(
+        style = "background-color: #FFFFF0;
+            border:hidden #FFFFF0; color:#9CBFC1",
+        selectInput("gender", label = "Gender", choices = c("Male", "Female")),
+        numericInput("weight",
+          label = "Weight in kg", value = 50, min = 1,
+          max = 1000
+        ),
+        numericInput("height",
+          label = "Height in cm", value = 160, min = 1,
+          max = 1000
+        ),
+        numericInput("age", label = "Age", value = 21, min = 1, max = 100),
+        selectInput("activity_factor",
+          label = "Exercise", choice =
+            c(
+              "little or no", "1-3 days per week",
+              "3-5 days per week", "6-7 days per week",
+              "Sport or Physical job"
+            )
+        ),
+        actionButton("calculate", "Calculate")
+      ),
+      mainPanel(
+        style = "color:#9CBFC1",
+        strong("Body Mass Index (BMI)"),
+        textOutput("BMI_value"),
+        br(),
+        br(),
+        br(),
+        strong("Calories Needed"),
+        textOutput("Calories_need"),
+        br(),
+        br(),
+        br(),
+        strong("BMI scale"),
+        br(),
+        img(src = "BMI_value_scale.png", width = "500", height = "200")
+      )
+    )
+  ),
 
-))
-second_page <- navbarMenu("Nutrition Calculator",
-  tabPanel("Nutrition Calculator",
-  sidebarLayout(
-    sidebarPanel(style ="background-color: #FFFFF0;
+  tabPanel(
+    "Nutrition for the day",
+    sidebarLayout(
+      sidebarPanel(
+        style = "background-color: #FFFFF0;
             border:hidden #FFFFF0; color:#9CBFC1",
-      selectInput("gender",label = "Gender",choices = c("Male", "Female")),
-                numericInput("weight",label = "Weight in kg",value = 50,min = 1,max = 1000),
-                numericInput("height",label = "Height in cm",value = 160,min = 1,max = 1000),
-                numericInput("age",label = "Age",value = 21, min = 1,max = 100),
-                selectInput("activity_factor",label = "Exercise",choice = c("little or no", 
-                    "1-3 days per week", "3-5 days per week","6-7 days per week", "Sport or Physical job")),
-                actionButton("calculate", "Calculate")),
-     mainPanel(style = "color:#9CBFC1",
-       strong("Body Mass Index (BMI)"),
-              textOutput("BMI_value"),
-              br(),
-              br(),
-              br(),
-              strong("Basic calories need"),
-              textOutput("Calories_need"),
-              br(),
-              br(),
-              br(),
-              strong("BMI scale"),
-              br(),
-              img(src = "BMI_value_scale.png",width="500",height="200")))),
-                          
-    tabPanel("Nutrition for the day",
-      sidebarLayout(
-          sidebarPanel(style = "background-color: #FFFFF0;
-            border:hidden #FFFFF0; color:#9CBFC1",
-                       tags$style(type="text/css",
-                                  ".shiny-output-error { visibility: hidden; }",
-                                  ".shiny-output-error:before { visibility: hidden; }"),
-             
-              strong("Number of dishes"), 
-              textOutput("n"),
-            uiOutput("dish_output"),
-            actionButton("add_btn", "Add dish")),
-       
-          
-          mainPanel(style = "color:#9CBFC1",
-                    strong("Nutrition Table"),
-              DT:: dataTableOutput("Nutrition")))))
-      
-                                     
+        tags$style(
+          type = "text/css",
+          ".shiny-output-error { visibility: hidden; }",
+          ".shiny-output-error:before { visibility:
+                                  hidden; }"
+        ),
+
+        strong("Number of dishes"),
+        textOutput("n"),
+        uiOutput("dish_output"),
+        actionButton("add_btn", "Add dish")
+      ),
+
+
+      mainPanel(
+        style = "color:#9CBFC1",
+        strong("Nutrition Table"),
+        DT::dataTableOutput("Nutrition")
+      )
+    )
+  )
+)
+
+
 
 third_page <- tabPanel(
   "Recipe from Ingredients",
-  titlePanel(h2("What can I make?", style = "color:#9CBFC1")),
+  titlePanel(h2("What Can I Make?", style = "color:#9CBFC1")),
   sidebarLayout(
-    sidebarPanel(style = "background-color: #FFFFF0;
+    sidebarPanel(
+      style = "background-color: #FFFFF0;
             border:hidden #FFFFF0; color:#9CBFC1",
       textInput(inputId = "ingredient_1", label = "Ingredient 1"),
       uiOutput("all_ingredients"),
@@ -260,16 +343,20 @@ third_page <- tabPanel(
       actionButton("search", "Search"),
       hr(),
       h3("List of Recipes"),
-      # selectInput(inputId = "intolerace", label = "Intolerance", choices = intolerace),
+      # selectInput(inputId = "intolerace", label = "Intolerance", choices =
+      # intolerace),
       uiOutput("recipes_3")
     ),
-    column(8,
+    column(
+      8,
       mainPanel(
-  
-          uiOutput("htt_3"),
-          tags$section(tags$hr(), plotlyOutput("bar_3"), tags$br(), tags$br(), tags$br()),
-          uiOutput("refer_3")
-        )
+        uiOutput("htt_3"),
+        tags$section(
+          tags$hr(), plotlyOutput("bar_3"), tags$br(), tags$br(),
+          tags$br()
+        ),
+        uiOutput("refer_3")
+      )
     )
   )
 )
