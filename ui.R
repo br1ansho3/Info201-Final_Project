@@ -124,7 +124,7 @@ home_page <- tabPanel(
         h2("Adding a Personal Touch"), h4(em("Finding the foods that agree with
                                              you and your eating goals can be
                                              tricky. The", strong("Recipes from
-                                                                  Nutrition"), "tab allows you to
+                                             Nutrition"), "tab allows you to
                                              set your needs to specific
                                              nutritional amounts. Then you can
                                              explore the recipes that will
