@@ -1,6 +1,8 @@
 # Info201-Final_Project (BE)
 > Henry Joseph Bates, Chunmo Chen, Brian Hsu, Ruiqi Yan
 
+[RecipEz](https://chunmochen.shinyapps.io/Info201-Final_Project/)
+
 **Project Description**
 1. What is the dataset you'll be working with?  Please include background on who collected the data, where you accessed it, and any additional information we should know about how this data came to be.
 
