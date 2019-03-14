@@ -17,6 +17,112 @@ titles2 <- list(
   "Fat(g)" = "fat", "Time(min)" = "time_limit", "Price(dollar)" = "price"
 )
 
+generatepage <- function(recipe_information){
+  recipe_price <- recipe_information[[8]]
+  recipe_time <- recipe_information[[9]]
+  recipe_name <- recipe_information[[3]]
+  recipe_tag <- recipe_information[[5]]
+  recipe_credit <- recipe_information[[6]]
+  recipe_source <- recipe_information[[7]]
+  recipe_image <- recipe_information[[2]]
+  recipe_ingredient <- recipe_information[[1]]
+  recipe_step <- recipe_information[[4]]
+  recipe_nutrient <- recipe_information[[10]]
+  numstep <- length(recipe_step)
+  numing <- nrow(recipe_ingredient)
+  h <- list(withTags(div(
+    class = "mytitle", h2(recipe_name),
+    p(
+      img(
+        src =
+          paste0(
+            "https://visualpharm.com/assets/147/",
+            "Tags-595b40b85ba036ed117da472.svg"
+          ),
+        width = "30px"
+      ),
+      em(recipe_tag)
+    ),
+    p(
+      img(src = "b864fae79c.png", width = "30px"),
+      em(a(href = recipe_source, recipe_credit))
+    )
+  )),
+  withTags(div(
+    class = "myImage", section(img(
+      src = recipe_image, width = "400px",
+      style = "margin-right: 50px;
+      margin-bottom: 10px"
+    )),
+    footer(
+      h4("Ingredient"),
+      ul(lapply(1:numing, function(i) {
+        li(recipe_ingredient$originalString[i])
+      }),
+      style = "list-style-type:disc; list-style-position: inside;"
+      )
+    )
+    )),
+  withTags(div(
+    class = "myStep",
+    section(
+      hr(),
+      h4("Instruction"),
+      lapply(1:numstep, function(i) {
+        p(recipe_step[i])
+      }),
+      br(),
+      br()
+    ))))
+  recipe_nutrient <- recipe_nutrient %>%
+    mutate(amount = paste0(amount, unit)) %>%
+    mutate(nutrient = title) %>%
+    mutate(percentage = percentOfDailyNeeds)
+  getPalette <- colorRampPalette(brewer.pal(12, "Set3"))
+  colourCount <- nrow(recipe_nutrient)
+  b <- ggplot(data = recipe_nutrient, aes(
+    x = nutrient, y = percentage,
+    fill = amount
+  )) +
+    geom_col(show.legend = FALSE, width = 0.7) + labs(
+      title = "Nutrient Bars",
+      x = "Nutrient Name",
+      y = "% of Daily Need"
+    ) +
+    theme(axis.text.x = element_text(size = 6)) +
+    scale_fill_manual(values = getPalette(colourCount)) +
+    coord_flip() +
+    scale_y_continuous(
+      expand = c(0, 0),
+      limits = c(0, max(recipe_nutrient$percentage) + 20)
+    )
+  b <- ggplotly(b) %>% layout(showlegend = FALSE)
+  r <- withTags(div(section(
+    p(recipe_price),
+    p(recipe_time),
+    br(),
+    br(),
+    hr(),
+    h4("reference"),
+    ul(
+      li(a(
+        href = "https://pngtree.com/free-icon",
+        "free icons"
+      ), "from pngtree.com"),
+      li(p(a(
+        href = paste0(
+          "https://visualpharm.com/free-icons/",
+          "tags-595b40b85ba036ed117da472"
+        ),
+        "tag icon"
+      ), "from visualpharm.com"))
+    )
+  )))
+  list(h,b,r)
+}
+
+
+
 generatelist <- function(query_parameter, time, budget, key) {
   uri <- paste0(
     "https://spoonacular-recipe-food-nutrition-v1.",
@@ -199,121 +305,21 @@ server <- function(input, output, session) {
     recipe_data <- generaterecipe(id_of_interest)
   })
   output$htt <- renderUI({
-    if (input$submit == 0) return(h2("Recipe"))
+    if (input$submit == 0) return(list(h2("Recipe"),
+                            withTags(div(footer(h4("Ingredient")))),
+                          withTags(section(hr(),h4("Instruction")))))
     recipe_information <- information()
-    recipe_name <- recipe_information[[3]]
-    recipe_tag <- recipe_information[[5]]
-    recipe_credit <- recipe_information[[6]]
-    recipe_source <- recipe_information[[7]]
-    withTags(div(
-      class = "mytitle", h2(recipe_name),
-      p(
-        img(
-          src =
-            paste0(
-              "https://visualpharm.com/assets/147/",
-              "Tags-595b40b85ba036ed117da472.svg"
-            ),
-          width = "30px"
-        ),
-        em(recipe_tag)
-      ),
-      p(
-        img(src = "b864fae79c.png", width = "30px"),
-        em(a(href = recipe_source, recipe_credit))
-      )
-    ))
-  })
-  output$image <- renderUI({
-    if (input$submit == 0) return(tags$footer(h4("Ingredient")))
-    recipe_information <- information()
-    recipe_image <- recipe_information[[2]]
-    recipe_ingredient <- recipe_information[[1]]
-    numing <- nrow(recipe_ingredient)
-    withTags(div(
-      class = "myImage", section(img(
-        src = recipe_image, width = "400px",
-        style = "margin-right: 50px;
-                                             margin-bottom: 10px"
-      )),
-      footer(
-        h4("Ingredient"),
-        ul(lapply(1:numing, function(i) {
-          li(recipe_ingredient$originalString[i])
-        }),
-        style = "list-style-type:disc; list-style-position: inside;"
-        )
-      )
-    ))
-  })
-
-  output$stepp <- renderUI({
-    if (input$submit == 0) return()
-    recipe_information <- information()
-    recipe_step <- recipe_information[[4]]
-    numstep <- length(recipe_step)
-    withTags(div(
-      class = "myStep",
-      lapply(1:numstep, function(i) {
-        p(recipe_step[i])
-      }),
-      br(),
-      br()
-    ))
+    generatepage(recipe_information)[[1]]
   })
   output$refer <- renderUI({
     if (input$submit == 0) return()
     recipe_information <- information()
-    recipe_price <- recipe_information[[8]]
-    recipe_time <- recipe_information[[9]]
-    withTags(div(section(
-      p(recipe_price),
-      p(recipe_time),
-      br(),
-      br(),
-      ul(
-        li(a(
-          href = "https://pngtree.com/free-icon",
-          "free icons"
-        ), "from pngtree.com"),
-        li(p(a(
-          href = paste0(
-            "https://visualpharm.com/free-icons/",
-            "tags-595b40b85ba036ed117da472"
-          ),
-          "tag icon"
-        ), "from visualpharm.com"))
-      )
-    )))
+    generatepage(recipe_information)[[3]]
   })
 
   output$bar <- renderPlotly({
     if (input$submit == 0) return()
     recipe_information <- information()
-    recipe_nutrient <- recipe_information[[10]]
-    recipe_nutrient <- recipe_nutrient %>%
-      mutate(amount = paste0(amount, unit)) %>%
-      mutate(nutrient = title) %>%
-      mutate(percentage = percentOfDailyNeeds)
-    getPalette <- colorRampPalette(brewer.pal(12, "Set3"))
-    colourCount <- nrow(recipe_nutrient)
-    b <- ggplot(data = recipe_nutrient, aes(
-      x = nutrient, y = percentage,
-      fill = amount
-    )) +
-      geom_col(show.legend = FALSE, width = 0.7) + labs(
-        title = "Nutrient Bars",
-        x = "Nutrient Name",
-        y = "% of Daily Need"
-      ) +
-      theme(axis.text.x = element_text(size = 6)) +
-      scale_fill_manual(values = getPalette(colourCount)) +
-      coord_flip() +
-      scale_y_continuous(
-        expand = c(0, 0),
-        limits = c(0, max(recipe_nutrient$percentage) + 20)
-      )
-    b <- ggplotly(b) %>% layout(showlegend = FALSE)
-    return(b)
+    generatepage(recipe_information)[[2]]
   })
 }
