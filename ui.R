@@ -237,10 +237,13 @@ second_page <- navbarMenu("Nutrition Calculator",
               strong("Number of dishes"), 
               textOutput("n"),
             uiOutput("dish_output"),
-            actionButton("add_btn", "Add dish")),
+            actionButton("add_btn", "Add dish"),
+       
+          
           mainPanel(style = "color:#9CBFC1",
                     strong("Nutrition Table"),
-              dataTableOutput("Nutrition")))))
+              DT:: dataTableOutput("Nutrition")))))
+      )
                                      
 
 third_page <- tabPanel(
