@@ -1,6 +1,7 @@
 
 body{
-font-family: serif
+font-family: serif;
+color:#7D9899;
 }
 
 .navbar.navbar-default {
@@ -8,7 +9,7 @@ font-family: serif
     border: hidden !important;
 }
 .navbar-brand {
-  color: #9CBFC1 !important;
+  color: #8CA9AA !important;
   font-size:3em;
 }
 .navbar-default .navbar-nav>li>a{
