@@ -204,7 +204,7 @@ first_page <- tabPanel("Recipes given Nutrition",
 second_page <- navbarMenu("Nutrition Calculator",
   tabPanel("Nutrition Calculator",
   sidebarLayout(
-    sidebarPanel(style = "color:#9CBFC1",
+    sidebarPanel(style = "color:#9CBFC1", 
       selectInput("gender",label = "Gender",choices = c("Male", "Female")),
                 numericInput("weight",label = "Weight in kg",value = 50,min = 1,max = 1000),
                 numericInput("height",label = "Height in cm",value = 160,min = 1,max = 1000),
