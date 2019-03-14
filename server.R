@@ -6,6 +6,10 @@ source("api-keys.R")
 library(jsonlite)
 library(httr)
 library(RColorBrewer)
+library(shinyjs)
+
+recipe_uri <- "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/"
+recipe_endpoint <- "findByIngredients"
 
 titles1 <- list(
   "calories" = "Calories", "carbs" = "Carbs(g)", "protein" = "Protein(g)",
@@ -208,6 +212,7 @@ generaterecipe <- function(id) {
 
 
 server <- function(input, output, session) {
+# page one  
   get_recipes <- eventReactive(input$submit, {
     offset_r <- sample(0:800, 1)
     query_r <- list(
@@ -321,5 +326,73 @@ server <- function(input, output, session) {
     if (input$submit == 0) return()
     recipe_information <- information()
     generatepage(recipe_information)[[2]]
+  })
+# end of page 1
+  
+#page 3
+  ingredients_list <- tagList()
+  
+  output$all_ingredients <- renderUI({
+    counter <- input$add_ingredient
+    print(counter)
+    if(is.null(counter) | counter < 1) return()
+    id <- paste0("ingredient_", counter + 1)
+    label <- paste0("Ingredient ", counter + 1, ":")
+    widget <- textInput(id, label)
+    ingredients_list <<- tagAppendChild(ingredients_list, widget)
+    if(counter == 4) disable("add_ingredient")
+    ingredients_list
+  })
+  
+  names_to_id <- NULL
+  #vector of recipe names
+  recipe_input <- eventReactive(input$search, {
+    test <- paste(input$ingredient_1, input$ingredient_2, input$ingredient_3, input$ingredient_4, input$ingredient_5, sep = ",")
+    while(substr(test, nchar(test), nchar(test)) == ",") {
+      test <- gsub(".$", "", test)
+    }
+    param <- list(test)
+    ingredients <- list(ingredients = param)
+    response <- GET(paste0(recipe_uri, recipe_endpoint), add_headers("X-RapidAPI-Key" = recipe_key), query = ingredients)
+    content <- content(response, type = "text")
+    data <- fromJSON(content)
+    
+    # make df for names to id
+    names_to_id <<- data %>% 
+      select(id, title)
+    # return names
+    names_to_id$title
+  })
+  
+  
+  output$recipes_3 <- renderUI({
+    ul <- tags$ul()
+    for(name in recipe_input()) {
+      li <- tags$li(name)
+      ul <- tagAppendChild(ul, li)
+    }
+    recipe_list <- tagList(ul,
+                           selectInput("recipes_3", "Choose a Recipe:", choices = names_to_id$title))
+    recipe_list
+  })
+  
+  information_3 <- eventReactive(input$recipes_3, {
+    id <- names_to_id[names_to_id$title == input$recipes_3, ]$id
+    recipes_data <- generaterecipe(id)
+  })
+  
+  output$htt_3 <- renderUI({
+    recipe_information <- information_3()
+    generatepage(recipe_information)[[1]]
+  })
+  
+  output$bar_3 <- renderPlotly({
+    recipe_information <- information_3()
+    generatepage(recipe_information)[[2]]
+  })
+  
+  output$refer_3 <- renderUI({
+    recipe_information <- information_3()
+    generatepage(recipe_information)[[3]]
   })
 }
