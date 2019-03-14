@@ -92,12 +92,12 @@ third_page <- tabPanel(
 
 ui <- tagList(
   navbarPage(
-    useShinyjs(),
     title = "RecipEZ",
     home_page,
     first_page,
     second_page,
     third_page,
-    theme = "style.css"
+    theme = "style.css",
+    useShinyjs()
   )
 )
