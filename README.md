@@ -21,7 +21,7 @@
 
     - What are the appropriate recipes that provide certain amount of nutrition combination? What's the proportion of each kind of nutrition for each recipe being selected?
     - How much calories absorbed in terms of the food eaten? The amount of consumed calories from the daily calories limited set by user themselves.
-    - Given a specific ingredient(s), what recipes can one make? (For people who want to change things up but don't know what to make) and how much calories is contained in this recipe? 
+    - Given a specific ingredient(s), what recipes can one make? (For people who want to change things up but don't know what to make) and how much calories is contained in this recipe?
 
 **Technical Description**
 
@@ -42,9 +42,13 @@
       - Shiny
       - ggplot2
       - Plotly
-      - [ggiraph](http://davidgohel.github.io/ggiraph/)
+      - shinyjs
+      - shinywidget
+      - shiny
       - [DT](https://rstudio.github.io/DT/)
       - [Highcharter](http://jkunst.com/highcharter/hchart.html)
+      - RColorBrewer
+      - rapport
       - Jsonlite
       - Httr
 
