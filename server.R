@@ -217,7 +217,7 @@ generaterecipe <- function(id) {
 
 nutrition_endpoint <- paste0(recipe_uri,nutrition_action)
 nutrition_table <- function(dish){
-  nutrition_response <- GET(endpoint, 
+  nutrition_response <- GET(nutrition_endpoint, 
                   add_headers("X-RapidAPI-Key" = recipe_key), 
                   query = list(title = dish) )
   nutrition_response_text <- content(nutrition_response, type = "text", encoding = "ISO-8859-1")
