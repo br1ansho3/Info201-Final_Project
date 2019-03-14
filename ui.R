@@ -5,23 +5,31 @@ home_page <- tabPanel(
   fluidPage(
   titlePanel("About Us"),
   sidebarLayout(
-    sidebarPanel(tags$head(tags$style(HTML('.skin-black .main-sidebar {color: #000000; background-color: #FFB6C1;}')))
-,
+    sidebarPanel(style = "background-color: #FFFFF0; border:hidden #FFFFF0; color:#9CBFC1",
       img(src = "https://media.licdn.com/dms/image/C5603AQH1WCRU6fKPkw/profile-displayphoto-shrink_200_200/0?e=1557964800&v=beta&t=y6uk2g4kjGyAR6XBO0g6gwmu1AGI7JpzecEo8lSBtfE", style = "display: block; margin-left: auto; margin-right: auto;", width = "100x"),
       h3("Henry Bates"), "Hello! I'm Henry and I'm a Junior in the Environmental Science program. 
       I came to Informatics because I want to learn how I can better apply data visualization to 
       my field. Enjoy some new recipes!", br(), br(), "Email: batesh2@uw.edu", hr(),
       img(src = "https://media.licdn.com/dms/image/C5603AQHht_LSnn3rKA/profile-displayphoto-shrink_800_800/0?e=1557964800&v=beta&t=uVI8QhDBDtoYcrvOImXm56yO8sErTJ5bCQ5MTCeemwk",style = "display: block; margin-left: auto; margin-right: auto;", width = "100px"),
-      h3("Brian Hsu"),"Hi my name is Brian. I'm a Junior studying Mathematics. I'm taking this 
+      h3("Brian Hsu"),"Hi, my name is Brian. I'm a Junior studying Mathematics. I'm taking this 
       class because I love UI design and hope to double major in Informatics. We 
       hope you find some food youve never even thought to cook before.", br(), 
       br(), "Email: brianhsu@uw.edu", hr(),
-      img(src = "https://media.licdn.com/dms/image/C5603AQH1WCRU6fKPkw/profile-displayphoto-shrink_200_200/0?e=1557964800&v=beta&t=y6uk2g4kjGyAR6XBO0g6gwmu1AGI7JpzecEo8lSBtfE", style = "display: block; margin-left: auto; margin-right: auto;", width = "100x"),
-      h3("Ruiqi Yan"), "INTRO HERE", br(), br(), "Email: ruiqiy3@uw.edu", hr(),
-      img(src = "https://media.licdn.com/dms/image/C5603AQH1WCRU6fKPkw/profile-displayphoto-shrink_200_200/0?e=1557964800&v=beta&t=y6uk2g4kjGyAR6XBO0g6gwmu1AGI7JpzecEo8lSBtfE", style = "display: block; margin-left: auto; margin-right: auto;", width = "100x"),
-      h3("Chunmo Chen "), "INTRO HERE", br(), br(), "Email: ccm1997@uw.edu", hr(), width = 2
+      img(src = "https://s3.amazonaws.com/handshake.production/app/public/assets/students/13154183/profile/data.?1542575324", style = "display: block; margin-left: auto; margin-right: auto;", width = "100x"),
+      h3("Ruiqi Yan"), "Hello! I am Rachel, a Senior in Statistics Major at the
+      University of Washington. I choose recipes as topic of my final project 
+      because I am really interested in exploring delicacy. Informatics taught 
+      me a lot about data visualization and R application, which well relates to 
+      my field. Stay healthy and enjoy these various recipes!
+", br(), br(), "Email: ruiqiy3@uw.edu", hr(),
+      img(src = "https://scontent-sea1-1.xx.fbcdn.net/v/t1.0-9/20638469_495476044137055_2569655792785378768_n.jpg?_nc_cat=101&_nc_ht=scontent-sea1-1.xx&oh=4e80be0cbc3b8bf64b148f3289388850&oe=5D259B7F", style = "display: block; margin-left: auto; margin-right: auto;", width = "100x"),
+      h3("Chunmo Chen "), "Hi! I'm Mary and I'm a senior in the Neurobiology 
+      Major. The informatics classes are so cool and I want to learn more about how to 
+      present and analyze lab data. It is also so fun to use API's 
+      and study about recipes for every day! Bon Appetit! ", br(), br(), 
+      "Email: ccm1997@uw.edu", hr(), width = 2
     ),
-    mainPanel(
+    mainPanel(style = "color:#9CBFC1",
       h1("What Recipes Can You Find?"),
       img(src = "https://www.bi-lo.com/-/media/media/whatsnew/14_italian_brochure_spaghettimeatballs_028_banner.png?la=en&mw=1382", width = "1000px", height = "300px", style = "display: block; margin-left: auto; margin-right: auto;"),
       h2("A Classic for Everyone"), h4(em("Spaghetti with meatballs is a classic dish loved by many. However
@@ -36,7 +44,11 @@ home_page <- tabPanel(
       h2("Adding a Personal Touch"), h4(em("Finding the foods that agree with you and your eating goals can be tricky. 
                                            The", strong("Recipes from Nutrition"), "tab allows you to set your needs
                                            to specific nutritional amounts. Then you can explore the recipes that will leave you
-                                            feeling ready for anything!"))
+                                            feeling ready for anything!")), hr(),
+      img(src = "http://www.edwinascatering.com/images/banner-food.jpg", width = "1000px", height = "300px", style = "display: block; margin-left: auto; margin-right: auto;"),
+      h2("Where We Find the Recipes"), h4(em("We sourced our data from an API run by", strong("Spoonacular"), ". This allows 
+                                             us to provide the coolest new recipes that work for even the pickiest eaters. 
+                                             Let us know what the coolest dish you find is!", br(), h3("Thanks for visiting!")))
     )
   )
 )
