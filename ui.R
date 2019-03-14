@@ -232,15 +232,18 @@ second_page <- navbarMenu("Nutrition Calculator",
           sidebarPanel(style = "color:#9CBFC1",
                        tags$style(type="text/css",
                                   ".shiny-output-error { visibility: hidden; }",
-                                  ".shiny-output-error:before { visibility: hidden; }")
-                       ,
-            actionButton("add_btn", "Add dish"),
-              uiOutput("dish_output"),
+                                  ".shiny-output-error:before { visibility: hidden; }"),
+             
               strong("Number of dishes"), 
-              textOutput("n")),
+              textOutput("n"),
+            uiOutput("dish_output"),
+            actionButton("add_btn", "Add dish"),
+       
+          
           mainPanel(style = "color:#9CBFC1",
                     strong("Nutrition Table"),
-              dataTableOutput("Nutrition")))))
+              DT:: dataTableOutput("Nutrition")))))
+      )
                                      
 
 third_page <- tabPanel(
