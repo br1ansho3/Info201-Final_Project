@@ -9,32 +9,6 @@ library(shinyWidgets)
 library(RColorBrewer)
 
 
-cuisine_list <- list("African" = "african",
-                     "Chinese" = "chinese",
-                      "Japanese"="japanese", 
-                      "Korean" = "korean", 
-                        "Vietnamese" = "vietnamese", 
-                       "Thai" = "thai", 
-                       "Indian" = "indian", 
-                        "British" = "british", 
-                     "Irish" = "irish", 
-                     "French" = "french", 
-                     "Italian"="italian", 
-                    "Mexican" = "mexican", 
-                    "Spanish" = "spanish", 
-                    "middle eastern" = "middle eastern", 
-                    "Jewish" = "jewish", 
-                    "American" = "american", 
-                    "Cajun"="cajun", 
-                    "Southern" = "southern", 
-                    "Greek" = "greek", 
-                      "German" = "german", 
-                    "Nordic" = "nordic", 
-                    "Eastern European" = "eastern european", 
-                     "Caribbean" = "caribbean", "Latin" =  "latin american")
-
-
-
 home_page <- tabPanel("About Us")
 first_page <- tabPanel("Recipes given Nutrition", 
   fluidRow(
