@@ -1,12 +1,14 @@
 
-body
+body{
+font-family: serif
+}ss
 .navbar.navbar-default {
     background-color: #FFFFF0 !important;
     border: hidden !important;
 }
 .navbar-brand {
   color: #9CBFC1 !important;
-  font:
+  font-size:3em;
 }
 .navbar-default .navbar-nav>li>a{
   color: #9CBFC1 !important;

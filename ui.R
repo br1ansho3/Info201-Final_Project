@@ -66,8 +66,9 @@ third_page <- tabPanel(
   "Recipe from Ingredients",
   titlePanel("What can I make?"),
   sidebarLayout(
-    sidebarPanel(
-      textInput(inputId = "ingredient_1", label = "Ingredient 1", placeholder = "Ingredient 1"),
+    sidebarPanel(style = "background-color: #FFFFF0;
+            border:hidden #FFFFF0; color:#9CBFC1",
+      textInput(inputId = "ingredient_1", label = "Ingredient 1"),
       uiOutput("all_ingredients"),
       actionButton("add_ingredient", "Add Ingredient"),
       actionButton("search", "Search"),
@@ -92,7 +93,7 @@ third_page <- tabPanel(
 ui <- tagList(
   navbarPage(
     useShinyjs(),
-    title = "Recipeeeez",
+    title = "RecipEZ",
     home_page,
     first_page,
     second_page,
