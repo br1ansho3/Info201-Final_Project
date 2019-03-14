@@ -225,7 +225,7 @@ second_page <- navbarMenu("Nutrition Calculator",
               br(),
               strong("BMI scale"),
               br(),
-              img(src = "BMI_value_scale.png",width="495",height="200")))),
+              img(src = "BMI_value_scale.png",width="500",height="200")))),
                           
     tabPanel("Nutrition for the day",
       sidebarLayout(
