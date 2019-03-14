@@ -340,7 +340,7 @@ server <- function(input, output, session) {
     if (input$submit == 0) return(list(h2("Recipe"),tags$br(),
                                        tags$br(),
                                        tags$br(),
-                            withTags(div(footer(h4("Ingredient")))),
+                            withTags(div(footer(hr(), h4("Ingredient")))),
                           withTags(section(br(),br(),br(),
                                            hr(),h4("Instruction")))))
     recipe_information <- information()
