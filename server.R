@@ -5,169 +5,315 @@ library(plotly)
 source("api-keys.R")
 library(jsonlite)
 library(httr)
+library(RColorBrewer)
 
+titles1 <- list(
+  "calories" = "Calories", "carbs" = "Carbs(g)", "protein" = "Protein(g)",
+  "fat" = "Fat(g)", "time_limit" = "Time(min)", "price" = "Price(dollar)"
+)
 
-titles <- list("Calories" = "Calories", "Carbs" ="Carbs(g)", "Protein" = "Protein(g)", 
-             "Fat" = "Fat(g)","Time" = "Time(min)", "Price" = "Price(dollar)")
+titles2 <- list(
+  "Calories" = "calories", "Carbs(g)" = "carbs" , "Protein(g)"= "protein",
+  "Fat(g)" = "fat", "Time(min)" = "time_limit", "Price(dollar)" = "price"
+)
 
-generateList <- function(query_parameter, time, budget, key){
-  uri <- "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex"
-  response <- GET(uri, query = query_parameter, add_headers("X-RapidAPI-Key" = key))
+generatelist <- function(query_parameter, time, budget, key) {
+  uri <- paste0(
+    "https://spoonacular-recipe-food-nutrition-v1.",
+    "p.rapidapi.com/recipes/searchComplex"
+  )
+  response <- GET(uri,
+    query = query_parameter,
+    add_headers("X-RapidAPI-Key" = key)
+  )
   response_text <- content(response, "text")
   response_list <- fromJSON(response_text)
   recipe_list <- data.frame(
     id = response_list$results$id,
-    Name = response_list$results$title,
-    Calories = response_list$results$calories,
-    Carbs = as.numeric(gsub("g", "",response_list$results$carbs)),
-    Protein = as.numeric(gsub("g", "",response_list$results$protein)),
-    Fat = as.numeric(gsub("g", "",response_list$results$fat)),
-    Price_per_serving = response_list$results$pricePerServing,
-    Servings = response_list$results$servings,
-    Time = response_list$results$readyInMinutes,
-    stringsAsFactors = FALSE)
-  
-  recipe_list <- recipe_list %>% 
-    mutate(Price = round(Price_per_serving*Servings/100,1)) %>% 
-    filter(Price <= budget & Time <= time) %>% 
-    select(id, Name, Calories, Carbs, Protein, Fat, Time, Price)
-  
+    name = response_list$results$title,
+    calories = response_list$results$calories,
+    carbs = as.numeric(gsub("g", "", response_list$results$carbs)),
+    protein = as.numeric(gsub("g", "", response_list$results$protein)),
+    fat = as.numeric(gsub("g", "", response_list$results$fat)),
+    price_per_serving = response_list$results$pricePerServing,
+    servings = response_list$results$servings,
+    time_limit = response_list$results$readyInMinutes,
+    stringsAsFactors = FALSE
+  )
+
+  recipe_list <- recipe_list %>%
+    mutate(price = round(price_per_serving * servings / 100, 1)) %>%
+    filter(price <= budget & time_limit <= time) %>%
+    select(id, name, calories, carbs, protein, fat, time_limit, price)
+
   return(recipe_list)
 }
-generateRecipe <- function(id){
-  uri_2 <- "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/"
-  uri_full <- paste0(uri_2, id, "/information")
-  response2 <- GET(uri_full, add_headers("X-RapidAPI-Key" = recipe_key))
+generaterecipe <- function(id) {
+  uri_2 <- paste0(
+    "https://spoonacular-recipe-food-nutrition-v1",
+    ".p.rapidapi.com/recipes/"
+  )
+  uri_full <- paste0(uri_2, id, "/", "information")
+  response2 <- GET(uri_full,
+    query = list("includeNutrition" = TRUE),
+    add_headers("X-RapidAPI-Key" = recipe_key)
+  )
   response_text2 <- content(response2, "text")
   response_list2 <- fromJSON(response_text2)
-  ingredient <- response_list2$extendedIngredients %>% 
+  ingredient <- response_list2$extendedIngredients %>%
     select(originalString)
   image_src <- response_list2$image
-  Name <- response_list2$title
+  name <- response_list2$title
   steps <- response_list2$analyzedInstructions$steps[[1]]$step
-  
+
   for (i in 1:length(steps)) {
-    steps[i] <- paste0("Step ", i, ":", steps[i])
+    steps[i] <- paste0("Step ", i, ": ", steps[i])
   }
-  Tags <- c(response_list2$diets, response_list2$dishTypes, 
-            unlist(response_list2$cuisines))
+  Tags <- c(
+    response_list2$diets, response_list2$dishTypes,
+    unlist(response_list2$cuisines)
+  )
   Tag <- paste0(Tags[1])
-  
-  for(i in 2:length(Tags)){
+
+  for (i in 2:length(Tags)) {
     Tag <- paste0(Tag, ", ", Tags[i])
   }
-  information <- list("ingredient" = ingredient, "image" = image_src, 
-                      "name" = Name, "steps" = steps, "tags" = Tag)
+  credit_info <- response_list2$creditsText
+  url_info <- response_list2$sourceUrl
+  price <- paste0(
+    "Estimated Cost: ",
+    round(response_list2$pricePerServing * response_list2$servings / 100, 1),
+    "$"
+  )
+
+  time_ready <- paste0(
+    "Estimated Ready In ",
+    response_list2$readyInMinutes, " mins"
+  )
+  recipe_nutrient <- response_list2$nutrition$nutrients
+  information <- list(
+    "ingredient" = ingredient, "image" = image_src,
+    "name" = name, "steps" = steps, "tags" = Tag,
+    "credit" = credit_info, "source" = url_info,
+    "price" = price, "time" = time_ready,
+    "nutrient" = recipe_nutrient
+  )
 }
 
 
 server <- function(input, output, session) {
   get_recipes <- eventReactive(input$submit, {
-    query_r <- list("limitLicense" = TRUE, "offset" = 0, "number" = 100,
-              "minCalories" = input$calories[1], 
-              "maxCalories" = input$calories[2], 
-              "minFat" = input$fat[1], "maxFat" = input$fat[2],
-              "minProtein" = input$protein[1], 
-              "maxProtein" = input$protein[2],
-              "minCarbs" = input$carbs[1], 
-              "maxCarbs" = input$carbs[2],
-              "minCalcium" = input$calcium[1], 
-              "maxCalcium" = input$calcium[2],
-              "minVitaminA" = input$va[1], 
-              "maxVitaminA" = input$va[2],
-              "minVitaminC" = input$vc[1], 
-              "maxVitaminC" = input$vc[2],
-              "minVitaminD" = input$vd[1], 
-              "maxVitaminD" = input$vd[2],
-              "minVitaminE" = input$ve[1], 
-              "maxVitaminE" = input$ve[2],
-              "addRecipeInformation" = TRUE,
-              "instructionsRequired" = TRUE)
-    recipe_data <- generateList(query_r, input$timelimit, input$pricelimit, 
-                                recipe_key)
+    offset_r <- sample(0:800, 1)
+    query_r <- list(
+      "limitLicense" = TRUE, "offset" = offset_r, "number" = 80,
+      "minCalories" = input$calories[1],
+      "maxCalories" = input$calories[2],
+      "minFat" = input$fat[1], "maxFat" = input$fat[2],
+      "minProtein" = input$protein[1],
+      "maxProtein" = input$protein[2],
+      "minCarbs" = input$carbs[1],
+      "maxCarbs" = input$carbs[2],
+      "minCalcium" = input$calcium[1],
+      "maxCalcium" = input$calcium[2],
+      "minVitaminA" = input$va[1],
+      "maxVitaminA" = input$va[2],
+      "minVitaminC" = input$vc[1],
+      "maxVitaminC" = input$vc[2],
+      "minVitaminD" = input$vd[1],
+      "maxVitaminD" = input$vd[2],
+      "minVitaminE" = input$ve[1],
+      "maxVitaminE" = input$ve[2],
+      "addRecipeInformation" = "true",
+      "instructionsRequired" = "true"
+    )
+    recipe_data <- generatelist(
+      query_r, input$timelimit, input$pricelimit,
+      recipe_key
+    )
     return(recipe_data)
-    })
-  
+  })
+
   output$recipe <- renderUI({
-    if(input$submit == 0) return()
+    if (input$submit == 0) return()
     recipe_list <- get_recipes()
-    selectInput("recipes", label = "choose a recipe to explore", 
-                 choices = recipe_list$Name, selected = recipe_list$Name[1])
-    
+    selectInput("recipes",
+      label = "Choose a recipe to explore",
+      choices = recipe_list$name, selected = recipe_list$name[1]
+    )
   })
-  output$choose_y <- renderUI ({
-    if(input$submit == 0) return()
+  output$choose_y <- renderUI({
+    if (input$submit == 0) return()
     recipe_list <- get_recipes()
-    selectInput("ylabel", label = "Choose a variable on y-axis", 
-        choices = colnames(recipe_list)[3:8], selected = colnames(recipe_list)[3])
+    selectInput("ylabel",
+      label = "Choose a variable on y-axis",
+      choices = titles2, selected = "calories"
+    )
   })
-  output$choose_x <- renderUI ({
-    if(input$submit == 0) return()
+  output$choose_x <- renderUI({
+    if (input$submit == 0) return()
     recipe_list <- get_recipes()
-    selectInput("xlabel", label = "Choose a variable on y-axis", 
-        choices = colnames(recipe_list)[3:8], selected = colnames(recipe_list)[8])
+    selectInput("xlabel",
+      label = "Choose a variable on x-axis",
+      choices = titles2, selected = "price"
+    )
   })
   output$scatter <- renderPlotly({
-    if(input$submit == 0) return()
+    if (input$submit == 0) return()
     recipe_list <- get_recipes()
-    data_var <- recipe_list %>% select("Name", input$ylabel, input$xlabel)
+    data_var <- recipe_list %>% select("name", input$ylabel, input$xlabel)
     p <- ggplot(data = data_var) +
-      geom_point(mapping = aes_string(x = input$xlabel, y =input$ylabel, 
-                                      col = "Name"), show.legend = FALSE) +
+      geom_point(mapping = aes_string(
+        x = input$xlabel, y = input$ylabel,
+        col = "name"
+      ), show.legend = FALSE) +
       labs(
-        title = paste0(titles[[input$ylabel]], 
-                       " versus ", 
-                       titles[[input$xlabel]], 
-                       " of Recipes on the list"),
-        x = titles[[input$xlabel]], y=titles[[input$ylabel]]
-      ) + theme(panel.background = element_blank())
+        title = paste0(
+          titles1[[input$ylabel]],
+          " versus ",
+          titles1[[input$xlabel]],
+          " of Recipes on the list"
+        ),
+        x = titles1[[input$xlabel]], y = titles1[[input$ylabel]]
+      ) + theme_bw() + theme(
+        panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(colour = "black")
+      )
     p <- ggplotly(p) %>% layout(showlegend = FALSE)
     return(p)
   })
-  observeEvent(event_data("plotly_click"),{
-    newValue <- event_data("plotly_click")
+  observeEvent(event_data("plotly_click"), {
+    newvalue <- event_data("plotly_click")
     yname <- input$ylabel
     xname <- input$xlabel
     recipe_list <- get_recipes()
-    data_var <- recipe_list %>% select("Name", input$ylabel, input$xlabel)
-    newRow <- data_var %>% filter(get(yname) == newValue$y & get(xname) == 
-                                    newValue$x)
-    updateSelectInput(session, "recipes", selected = newRow$Name)
+    data_var <- recipe_list %>% select("name", input$ylabel, input$xlabel)
+    newrow <- data_var %>% filter(get(yname) == newvalue$y & get(xname) ==
+      newvalue$x)
+    updateSelectInput(session, "recipes", selected = newrow$name)
   })
-  information <- eventReactive(input$recipes,{
+  information <- eventReactive(input$recipes, {
     recipe_list <- get_recipes()
-    id_of_interest <- recipe_list[recipe_list$Name == input$recipes,]$id
-    recipe_data <- generateRecipe(id_of_interest)
+    id_of_interest <- recipe_list[recipe_list$name == input$recipes, ]$id
+    recipe_data <- generaterecipe(id_of_interest)
   })
   output$htt <- renderUI({
-    if(input$submit == 0) return()
+    if (input$submit == 0) return(h2("Recipe"))
     recipe_information <- information()
-    recipe_ingredient <- recipe_information[[1]]
     recipe_name <- recipe_information[[3]]
-    recipe_image <- recipe_information[[2]]
     recipe_tag <- recipe_information[[5]]
-    numIng <- nrow(recipe_ingredient)
-    tags = ""
-    list(withTags(div(class = "mytitle", h2(recipe_name),
-                      p(img(src = 
-                              "https://visualpharm.com/assets/147/Tags-595b40b85ba036ed117da472.svg",
-                            width = "30px"),
-                        em(recipe_tag)), hr()
-    )),
-    withTags(div(class = "myIngredient", img(src = recipe_image, width = "400px",
-                                             style = "float: left; margin-right: 50px;
-                                             margin-bottom: 10px"), 
-                 ul(lapply(1:numIng, function(i){
-                   li(recipe_ingredient$originalString[i])
-                 }), style = "list-style-type:disc; list-style-position: inside;"), 
-                 hr())))
+    recipe_credit <- recipe_information[[6]]
+    recipe_source <- recipe_information[[7]]
+    withTags(div(
+      class = "mytitle", h2(recipe_name),
+      p(
+        img(
+          src =
+            paste0(
+              "https://visualpharm.com/assets/147/",
+              "Tags-595b40b85ba036ed117da472.svg"
+            ),
+          width = "30px"
+        ),
+        em(recipe_tag)
+      ),
+      p(
+        img(src = "b864fae79c.png", width = "30px"),
+        em(a(href = recipe_source, recipe_credit))
+      )
+    ))
   })
+  output$image <- renderUI({
+    if (input$submit == 0) return(tags$footer(h4("Ingredient")))
+    recipe_information <- information()
+    recipe_image <- recipe_information[[2]]
+    recipe_ingredient <- recipe_information[[1]]
+    numing <- nrow(recipe_ingredient)
+    withTags(div(
+      class = "myImage", section(img(
+        src = recipe_image, width = "400px",
+        style = "margin-right: 50px;
+                                             margin-bottom: 10px"
+      )),
+      footer(
+        h4("Ingredient"),
+        ul(lapply(1:numing, function(i) {
+          li(recipe_ingredient$originalString[i])
+        }),
+        style = "list-style-type:disc; list-style-position: inside;"
+        )
+      )
+    ))
+  })
+
   output$stepp <- renderUI({
-    if(input$submit == 0) return()
+    if (input$submit == 0) return()
     recipe_information <- information()
     recipe_step <- recipe_information[[4]]
-    numStep <- length(recipe_step)
-    withTags(div(class = "myStep", lapply(1:numStep, function(i){
-      p(recipe_step[i])
-    })))})
+    numstep <- length(recipe_step)
+    withTags(div(
+      class = "myStep",
+      lapply(1:numstep, function(i) {
+        p(recipe_step[i])
+      }),
+      br(),
+      br()
+    ))
+  })
+  output$refer <- renderUI({
+    if (input$submit == 0) return()
+    recipe_information <- information()
+    recipe_price <- recipe_information[[8]]
+    recipe_time <- recipe_information[[9]]
+    withTags(div(section(
+      p(recipe_price),
+      p(recipe_time),
+      br(),
+      br(),
+      ul(
+        li(a(
+          href = "https://pngtree.com/free-icon",
+          "free icons"
+        ), "from pngtree.com"),
+        li(p(a(
+          href = paste0(
+            "https://visualpharm.com/free-icons/",
+            "tags-595b40b85ba036ed117da472"
+          ),
+          "tag icon"
+        ), "from visualpharm.com"))
+      )
+    )))
+  })
+
+  output$bar <- renderPlotly({
+    if (input$submit == 0) return()
+    recipe_information <- information()
+    recipe_nutrient <- recipe_information[[10]]
+    recipe_nutrient <- recipe_nutrient %>%
+      mutate(amount = paste0(amount, unit)) %>%
+      mutate(nutrient = title) %>%
+      mutate(percentage = percentOfDailyNeeds)
+    getPalette <- colorRampPalette(brewer.pal(12, "Set3"))
+    colourCount <- nrow(recipe_nutrient)
+    b <- ggplot(data = recipe_nutrient, aes(
+      x = nutrient, y = percentage,
+      fill = amount
+    )) +
+      geom_col(show.legend = FALSE, width = 0.7) + labs(
+        title = "Nutrient Bars",
+        x = "Nutrient Name",
+        y = "% of Daily Need"
+      ) +
+      theme(axis.text.x = element_text(size = 6)) +
+      scale_fill_manual(values = getPalette(colourCount)) +
+      coord_flip() +
+      scale_y_continuous(
+        expand = c(0, 0),
+        limits = c(0, max(recipe_nutrient$percentage) + 20)
+      )
+    b <- ggplotly(b) %>% layout(showlegend = FALSE)
+    return(b)
+  })
 }

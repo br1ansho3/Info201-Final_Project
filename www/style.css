@@ -1,0 +1,52 @@
+
+body
+.navbar.navbar-default {
+    background-color: #FFFFF0 !important;
+    border: hidden !important;
+}
+.navbar-brand {
+  color: #9CBFC1 !important;
+  font:
+}
+.navbar-default .navbar-nav>li>a{
+  color: #9CBFC1 !important;
+}
+.navbar-default .navbar-nav>.active>a,
+.navbar-default .navbar-nav>.active>a:focus,
+.navbar-default .navbar-nav>.active>a:hover{
+    background-color:#FFFFFF !important;
+    color: #8CA9AA !important;
+}
+
+.form-group.shiny-input-container {
+  height: 83px;
+}
+
+#choose_y{
+  height: 150px !important;
+}
+#choose_x{
+  height: 150px !important;
+}
+#recipe{
+  height:150px !important;
+}
+.selectize-dropdown,
+.selectize-input, .selectize-input input{
+color: #8CA9AA !important;
+}
+section {
+  float: left;
+}
+aside {
+  float:left
+}
+.nav-tabs>li.active>a,
+ .nav-tabs>li.active>a:focus,
+ .nav-tabs>li.active>a:hover{
+   color: #8CA9AA !important;
+ }
+
+ a {
+   color: #ADCFD1 !important;
+ }

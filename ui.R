@@ -5,6 +5,10 @@ library(plotly)
 source("api-keys.R")
 library(jsonlite)
 library(httr)
+library(shinyWidgets)
+library(RColorBrewer)
+
+
 cuisine_list <- list("African" = "african",
                      "Chinese" = "chinese",
                       "Japanese"="japanese", 
@@ -33,8 +37,14 @@ cuisine_list <- list("African" = "african",
 
 home_page <- tabPanel("About Us")
 first_page <- tabPanel("Recipes given Nutrition", 
-  fluidRow(titlePanel("Give Me Some Nutrition"),
-  column(3, wellPanel(sliderInput("calories", label = strong("Choose range of calories"), min=10,max=1000,
+  fluidRow(
+  column(3,
+  wellPanel(style = "background-color: #FFFFF0;
+            border:hidden #FFFFF0; color:#9CBFC1",
+            chooseSliderSkin("Modern", color = "#9CBFC1"),
+  titlePanel(h3(class = "mytitle", "Give Me Some Nutrition")),
+  sliderInput("calories", label = strong("Choose range of calories")
+              , min=10,max=1000,
               value = c(10,2000)),
   sliderInput("fat", label = strong("Choose range of fat (gram)"), min=0,max=50,
               value = c(0,50)), 
@@ -60,14 +70,20 @@ first_page <- tabPanel("Recipes given Nutrition",
               value = 15),
   actionButton("submit", label = "Submit"))),
 
-  column(2,conditionalPanel(condition = "input.submit > 0",
-  uiOutput("recipe"),
+  column(2, 
+         conditionalPanel(condition = "input.submit > 0",
+  wellPanel(style = "background-color: #FFFFF0;
+            border:hidden #FFFFF0; color:#9CBFC1",uiOutput("recipe"),
   uiOutput("choose_y"),
-  uiOutput("choose_x")))
+  uiOutput("choose_x"))))
   #selectInput("cuisine", label = strong("Choose cuisine(s)"), choices = ),
-, 
-column(7,tabsetPanel(tabPanel("Recipe Details", uiOutput("htt"), 
-                              uiOutput("stepp")), 
+,
+    column(7,tabsetPanel(tabPanel("Recipe Details", uiOutput("htt"),tags$hr(),
+                                  uiOutput("image"),
+                    tags$section(hr(), h4("Instruction"),uiOutput("stepp")),
+                    tags$section(tags$hr(),plotlyOutput("bar"),
+                                 tags$br(),tags$br(),tags$br()),
+                    uiOutput("refer")),
                      tabPanel("Two Variabls Plot",plotlyOutput("scatter"))))
 
 ))
@@ -77,9 +93,10 @@ third_page <- tabPanel("Recipe from Ingredients")
 
 
 ui <- navbarPage(
-  "Recipeeeez",
+  title = "Recipeeeez",
   home_page,
   first_page,
   second_page,
-  third_page
+  third_page,
+  theme = "style.css"
 )
