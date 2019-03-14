@@ -77,12 +77,13 @@ third_page <- tabPanel(
       # selectInput(inputId = "intolerace", label = "Intolerance", choices = intolerace),
       uiOutput("recipes_3")
     ),
-    mainPanel(
-      column(7,
-        uiOutput("htt_3"),
-        tags$section(tags$hr(), plotlyOutput("bar_3"), tags$br(), tags$br(), tags$br()),
-        uiOutput("refer_3")
-      )
+    column(8,
+      mainPanel(
+  
+          uiOutput("htt_3"),
+          tags$section(tags$hr(), plotlyOutput("bar_3"), tags$br(), tags$br(), tags$br()),
+          uiOutput("refer_3")
+        )
     )
   )
 )
