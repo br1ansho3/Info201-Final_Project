@@ -230,6 +230,10 @@ second_page <- navbarMenu("Nutrition Calculator",
     tabPanel("Nutrition for the day",
       sidebarLayout(
           sidebarPanel(style = "color:#9CBFC1",
+                       tags$style(type="text/css",
+                                  ".shiny-output-error { visibility: hidden; }",
+                                  ".shiny-output-error:before { visibility: hidden; }")
+                       ,
             actionButton("add_btn", "Add dish"),
               uiOutput("dish_output"),
               strong("Number of dishes"), 

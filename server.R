@@ -13,6 +13,8 @@ recipe_uri <- "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recip
 recipe_endpoint <- "findByIngredients"
 nutrition_action <- "guessNutrition"
 
+options(shiny.sanitize.errors = TRUE)
+
 titles1 <- list(
   "calories" = "Calories", "carbs" = "Carbs(g)", "protein" = "Protein(g)",
   "fat" = "Fat(g)", "time_limit" = "Time(min)", "price" = "Price(dollar)"
