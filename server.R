@@ -231,7 +231,8 @@ nutrition_table <- function(dish){
   nutrition_list <- c(calories,fat,protein,carbs)
   
   nutrition_table <- data.frame(Nutrition = c("Calories", "Fat", "Protein","Carbs"), 
-                                Value = nutrition_list)
+                                Value = c(0,0,0,0))
+  nutrition_table$Value <- nutrition_list
   return(nutrition_table)
 }
 
