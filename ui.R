@@ -165,8 +165,8 @@ first_page <- tabPanel(
         titlePanel(h3(class = "mytitle", "Give Me Some Nutrition")),
         sliderInput("calories",
           label =
-            strong("Choose range of calories"), min = 10, max = 1000,
-          value = c(10, 2000)
+            strong("Choose range of calories"), min = 10, max = 2000,
+          value = c(10, 1000)
         ),
         sliderInput("fat",
           label = strong("Choose range of fat (gram)"), min = 0,
